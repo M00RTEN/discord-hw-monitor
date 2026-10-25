@@ -1,11 +1,11 @@
 /**
  * @name HardwareMonitorOverlay
  * @author M00RTEN
- * @authorLink https://github.com/DITT-BRUKERNAVN
+ * @authorLink https://github.com/M00RTEN
  * @version 2.3.0
  * @description Viser CPU/GPU/RAM-data fra LibreHardwareMonitor i Discord-menyen (under Meldingsforespørsler i DM, og under servernavn på servere).
- * @source https://github.com/DITT-BRUKERNAVN/BD-HardwareMonitorOverlay
- * @updateUrl https://raw.githubusercontent.com/DITT-BRUKERNAVN/BD-HardwareMonitorOverlay/main/HardwareMonitorOverlay.plugin.js
+ * @source https://github.com/M00RTEN/discord-hw-monitor
+ * @updateUrl https://raw.githubusercontent.com/M00RTEN/discord-hw-monitor/main/HardwareMonitorOverlay.plugin.js
  * @invite gBctYMD3fd
  */
 
