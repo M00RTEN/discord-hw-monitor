@@ -1,114 +1,55 @@
-<div align="center">
+# Hardware Monitor Overlay
 
-# 🖥️ Hardware Monitor Overlay
-
-**Live CPU, GPU and RAM stats right inside your Discord sidebar.**
-
-[![BetterDiscord](https://img.shields.io/badge/BetterDiscord-plugin-3E82E5?style=for-the-badge)](https://betterdiscord.app)
-[![Version](https://img.shields.io/badge/version-2.3.0-brightgreen?style=for-the-badge)](../../releases)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Windows-0078D6?style=for-the-badge&logo=windows)](#requirements)
+A small BetterDiscord plugin that shows your CPU, GPU and RAM stats in the Discord sidebar. I wanted to keep an eye on temps while gaming without alt-tabbing, so I made this.
 
 ![Screenshot](screenshot.png)
 
-</div>
+It shows CPU temp and load, GPU temp and load, and RAM usage. It appears under Message Requests in DMs and under the server name in servers. If you have both an integrated and a dedicated GPU, it tries to pick the dedicated one. Hover a row to see the exact hardware name. It follows your Discord theme colors.
 
----
+## What you need
 
-## ✨ Features
+- Windows (LibreHardwareMonitor only works there)
+- BetterDiscord
+- LibreHardwareMonitor running with its web server turned on
 
-- 🌡️ **CPU** temperature and load
-- 🎮 **GPU** temperature and load (automatically prefers your dedicated GPU over integrated graphics)
-- 🧠 **RAM** usage
-- 📍 Shows in **DMs** (below *Message Requests*) and in **servers** (below the server name)
-- 🎨 Follows your Discord theme colors
-- ⚡ Lightweight – one request every 2 seconds, no background services of its own
-- 🔍 Hover a row to see the exact hardware name
+## Setup
 
-## 📋 Requirements
+**LibreHardwareMonitor first:**
 
-| Requirement | Notes |
-|---|---|
-| Windows | LibreHardwareMonitor is Windows-only |
-| [BetterDiscord](https://betterdiscord.app) | Installed on your Discord client |
-| [LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) | Must be running, with the remote web server enabled |
+1. Download and start it. Run it as admin, otherwise a lot of sensors won't show up.
+2. Go to Options > Remote Web Server > Run.
+3. Open http://localhost:8085/data.json in your browser. If you see a wall of JSON, you're good.
 
-## 🚀 Installation
+**Then the plugin:**
 
-### 1. Set up LibreHardwareMonitor
+1. Download `HardwareMonitorOverlay.plugin.js` from this repo.
+2. In Discord, go to Settings > Plugins > Open Plugins Folder.
+3. Drop the file in there and enable it.
 
-1. Download and start LibreHardwareMonitor (run as administrator for full sensor access).
-2. Go to **Options → Remote Web Server → Run**.
-3. Check that `http://localhost:8085/data.json` opens in your browser.
+## Settings
 
-### 2. Install the plugin
+There's no settings menu. Open the plugin file in a text editor and change the constants at the top:
 
-1. Download [`HardwareMonitorOverlay.plugin.js`](HardwareMonitorOverlay.plugin.js).
-2. Open Discord → **Settings → Plugins → Open Plugins Folder**.
-3. Move the file into that folder.
-4. Enable **HardwareMonitorOverlay** in the plugin list.
+- `DATA_URL` is where it fetches data from. Default is `http://localhost:8085/data.json`. You can point it at another PC on your network if you want.
+- `UPDATE_MS` is how often it refreshes. Default is 2000 (every 2 seconds).
+- `RAM_OFFSET` is a fudge factor for RAM. LibreHardwareMonitor and Task Manager calculate RAM usage a bit differently, so the numbers don't always match. Compare with Task Manager and adjust until they line up, or set it to 0 for the raw value.
 
-## ⚙️ Configuration
+## If something's off
 
-Open the plugin file in a text editor and change the constants at the top:
+**It says "Ingen data" / "No data":** LibreHardwareMonitor isn't running or the web server is off. Check the data.json link above.
 
-| Constant | Default | Description |
-|---|---|---|
-| `DATA_URL` | `http://localhost:8085/data.json` | LibreHardwareMonitor endpoint. Change this to monitor another machine on your network. |
-| `UPDATE_MS` | `2000` | Refresh interval in milliseconds. |
-| `RAM_OFFSET` | `-10` | RAM calibration in percentage points (see below). |
+**No temperatures:** run LibreHardwareMonitor as admin.
 
-### Calibrating RAM
+**Wrong GPU:** it picks the GPU with the most sensors and avoids integrated ones, which usually works but not always. Open an issue with your hardware names and I'll look at it.
 
-LibreHardwareMonitor and Windows Task Manager calculate RAM usage slightly differently,
-so the numbers may not match. Compare the overlay with Task Manager and adjust `RAM_OFFSET`
-until they line up. Set it to `0` for the raw LibreHardwareMonitor value.
+**Overlay doesn't show up:** Discord updates sometimes break the sidebar layout. Try turning the plugin off and on, or reload with Ctrl+R. Still nothing? Open an issue.
 
-## 🛠️ Troubleshooting
+## Privacy
 
-<details>
-<summary><b>It says "Ingen data" / "No data"</b></summary>
+It only talks to whatever `DATA_URL` points at, which is your own LibreHardwareMonitor by default. Nothing is sent anywhere else.
 
-LibreHardwareMonitor is not running, or the Remote Web Server is turned off.
-Open `http://localhost:8085/data.json` in your browser – if it doesn't load, the plugin can't either.
-</details>
+## Contributing
 
-<details>
-<summary><b>Temperatures are missing</b></summary>
+Bugs and PRs are welcome. Say which Discord, BetterDiscord and LibreHardwareMonitor versions you're on.
 
-Run LibreHardwareMonitor as administrator. Without it, many CPU/GPU sensors are not available.
-</details>
-
-<details>
-<summary><b>The wrong GPU is shown</b></summary>
-
-The plugin picks the GPU with the most sensors and penalizes integrated graphics.
-If it still picks wrong, [open an issue](../../issues) and include your hardware names.
-</details>
-
-<details>
-<summary><b>The overlay doesn't appear</b></summary>
-
-Discord updates can change the sidebar layout. Try toggling the plugin off and on, or
-reload Discord with `Ctrl + R`. If it still doesn't show, [open an issue](../../issues).
-</details>
-
-## 🔒 Privacy
-
-The plugin only talks to the address in `DATA_URL` (your own LibreHardwareMonitor by default).
-No data is sent anywhere else.
-
-## 🤝 Contributing
-
-Bug reports and pull requests are welcome. Please include your Discord/BetterDiscord
-version and LibreHardwareMonitor version when reporting problems.
-
-## 📄 License
-
-Released under the [MIT License](LICENSE).
-
----
-
-<div align="center">
-Made by <b>M00RTEN</b> · <a href="https://discord.gg/gBctYMD3fd">Discord</a>
-</div>
+MIT licensed. Made by M00RTEN.
